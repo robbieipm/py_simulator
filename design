@@ -1,0 +1,4 @@
+1. user decides map dimentions, food and creature amount
+2. creatures and food are spawned randomly on the map
+3. creatures have X movement to go find food and return home
+4. if creature food < 1 it dies, if = 1 lives, > 1 reproduces if has free neiboring tile

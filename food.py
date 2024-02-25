@@ -1,7 +1,7 @@
 class Food:
-    def __init__(self, xPos, yPos):
-        self.xPos = xPos
-        self.yPos = yPos
+    def __init__(self, position):
+        self.xPos = position[0]
+        self.yPos = position[1]
 
     def Position(self):
         return [self.xPos, self.yPos]

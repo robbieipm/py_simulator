@@ -35,7 +35,7 @@ class Grid:
             if emptyTile.Type() == Tile.EMPTY_TYPE:
                 return emptyTile
 
-        return Tile(-1, -1, "invalid")
+        return Tile(-1, -1, Tile.INVALID_TYPE)
 
     def Spawn(self, spawnType):
         emptyTile = self.GetEmptyTile()

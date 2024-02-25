@@ -1,59 +1,44 @@
-from grid import *
-import sys
-import time
+from turn_logic import *
+# import time
 
-def move_cursor_up(lines):
-    sys.stdout.write(f'\033[{lines}A')  # Move cursor up by `lines` lines
+# def pop_elements_conditionally(lst, condition):
+#     for i in range(len(lst)):  # Iterate over the list in reverse order
+#         if condition(lst[i]):  # Check if the condition is True for the element
+#             lst.pop(i)  # If True, pop the element from the list
 
-def move_cursor_down(lines):
-    sys.stdout.write(f'\033[{lines}B')  # Move cursor down by `lines` lines
+# creatures[0].FindClosestInList(foods)
+# foodCount = creatures[0].foodCount
+# while grid.MoveCreature(creatures[0]) or creatures[0].Position() != creatures[0].home:
+#     if creatures[0].foodCount > foodCount:
+#         foodCount = creatures[0].foodCount
+#         pop_elements_conditionally(foods, x: x.Position() == creatures[0].Position())
+#     creatures[0].FindClosestInList(foods)
+#     print(f"position: {creatures[0].Position()} home: {creatures[0].home} path: {creatures[0].path}")
+#     time.sleep(0.5)
+#     #move_cursor_up(GRID_HEIGHT)
+#     #for _ in range(GRID_WIDTH):
+#     #    clear_current_line()
+#     grid.PrintGrid()
 
-def clear_current_line():
-    sys.stdout.write('\033[K')  # Clear current line
+# input("\nPress any key to end")
 
-def pop_elements_conditionally(lst, condition):
-    for i in range(len(lst)):  # Iterate over the list in reverse order
-        if condition(lst[i]):  # Check if the condition is True for the element
-            lst.pop(i)  # If True, pop the element from the list
 
-#create simulation grid
-gridHeight = 10
-gridWidth = 10
-creatures = []
-foods = []
-grid = Grid(gridHeight, gridWidth)
-grid.PrintGrid()
+
+
+# app definitions
+GRID_HEIGHT = 10
+GRID_WIDTH = 10
 FOOD_SPAWN = 3
+MAX_TURN = 1
 
-# spawn creatures and food
-spawnedCreature = grid.Spawn(Tile.CREATURE_TYPE)
-if spawnedCreature == None:
-    print("ERROR: failed to spawn creature!")
-creatures.append(spawnedCreature)
+# app objects
+creatureMng = CreatureMng()
+foodMng = FoodMng()
+grid = Grid(GRID_HEIGHT, GRID_WIDTH)
+printer = Printer(grid)
+turnProcessor = TurnLogic(grid, foodMng, creatureMng, printer)
 
-for _ in range(FOOD_SPAWN):
-    spawnedFood = grid.Spawn(Tile.FOOD_TYPE)
-    if spawnedFood == None:
-        print("ERROR: failed to spawn food!")
-    foods.append(spawnedFood)
+# start simulator
+for i in range(MAX_TURN):
+    turnProcessor.Start(i)
 
-move_cursor_up(gridHeight)
-for _ in range(gridWidth):
-    clear_current_line()
-grid.PrintGrid()
-
-creatures[0].FindClosestInList(foods)
-foodCount = creatures[0].foodCount
-while grid.MoveCreature(creatures[0]) or creatures[0].Position() != creatures[0].home:
-    if creatures[0].foodCount > foodCount:
-        foodCount = creatures[0].foodCount
-        pop_elements_conditionally(foods, x: x.Position() == creatures[0].Position())
-    creatures[0].FindClosestInList(foods)
-    print(f"position: {creatures[0].Position()} home: {creatures[0].home} path: {creatures[0].path}")
-    time.sleep(0.5)
-    #move_cursor_up(gridHeight)
-    #for _ in range(gridWidth):
-    #    clear_current_line()
-    grid.PrintGrid()
-
-input("\nPress any key to end")

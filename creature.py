@@ -1,8 +1,8 @@
 class Creature:
-    def __init__(self, xPos, yPos):
-        self.xPos = xPos
-        self.yPos = yPos
-        self.home = [xPos, yPos]
+    def __init__(self, position):
+        self.xPos = position[0]
+        self.yPos = position[1]
+        self.home = position
         self.foodCount = 0
         self.path = [0, 0]
         self.stamina = 10

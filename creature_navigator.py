@@ -19,12 +19,18 @@ class CreatureNavigator:
     def Move(self, pathMoved):
         self.position = [self.position[0] + pathMoved[0], self.position[1] + pathMoved[1]]
 
+    def MoveTo(self, newPosition):
+        self.position = [newPosition[0], newPosition[1]]
+
     def Reset(self):
         self.stepRating = []
         self.path = [0, 0]
 
     def rateSteps(self):
         self.stepRating = []
+        if self.path == STAY_IN_PLACE:
+            self.stepRating.append(STAY_IN_PLACE)
+            return
         for possibleStep in possibleSteps:
             if isStepInPathDirection(possibleStep, self.path):
                 self.stepRating.insert(0, possibleStep)

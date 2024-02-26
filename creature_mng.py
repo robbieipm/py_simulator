@@ -40,7 +40,7 @@ class CreatureMng:
         for info in movementsInfo:
             newPosition = info[0]
             foodConsumed = info[1]
-            self.creatures[creatureIdx].Move(newPosition)
+            self.creatures[creatureIdx].MoveTo(newPosition)
             if foodConsumed > 0:
                 consumedFoodPositions.append(newPosition)
                 self.creatures[creatureIdx].Eat(foodConsumed)

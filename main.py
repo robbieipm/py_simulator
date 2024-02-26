@@ -24,7 +24,7 @@ from turn_logic import *
 GRID_HEIGHT = 10
 GRID_WIDTH = 10
 FOOD_SPAWN = 3
-MAX_TURN = 10
+MAX_TURN = 1
 
 # app objects
 creatureMng = CreatureMng()

@@ -12,6 +12,11 @@ class Creature:
 
     def Move(self, pathMoved):
         self.navigator.Move(pathMoved)
+        self.stamina -= 1
+
+    def MoveTo(self, pathMoved):
+        self.navigator.MoveTo(pathMoved)
+        self.stamina -= 1
 
     def Eat(self, foodAmount):
         self.foodCount += foodAmount

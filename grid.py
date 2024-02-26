@@ -68,30 +68,6 @@ class Grid:
 
         return [xChange, yChange]
 
-    def MoveCreature(self, creature):
-        if creature.path == [0, 0]:
-            return True
-        creaturePosition = creature.Position()
-        stepPosition = self.getStepPosition(creature.path)
-        newPosition = [creaturePosition[0] + stepPosition[0], creaturePosition[1] + stepPosition[1]]
-        # check if wanted tile is free
-        if not self.IsType(Tile.EMPTY_TYPE, newPosition):
-            if self.IsType(Tile.FOOD_TYPE , newPosition):
-                print("ATE!!")
-                creature.Eat(1)
-                #TODO: remove food
-            else:
-                print("BLOCKED!")
-                return False
-
-        self.grid[creature.xPos][creature.yPos].ChangeType(Tile.EMPTY_TYPE)
-        creature.path = [creature.path[0] - stepPosition[0], creature.path[1] - stepPosition[1]]
-        print(f"before position: {creature.Position()}")
-        creature.Move(stepPosition)
-        print(f"after position: {creature.Position()}")
-        self.grid[creature.xPos][creature.yPos].ChangeType(Tile.CREATURE_TYPE)
-        return True
-
     def isValidPosition(self, position):
         return position[0] >= 0 and position[0] < self.width and position[1] >= 0 and position[1] < self.height
 
@@ -104,7 +80,7 @@ class Grid:
             for i in range(len(ratedSteps)):
                 newPosition = [oldPosition[0] + ratedSteps[i][0], oldPosition[1] + ratedSteps[i][1]]
                 if not self.isValidPosition(newPosition):
-                    break
+                    continue
                 if self.IsType(Tile.EMPTY_TYPE, newPosition) or newPosition == oldPosition:
                     break
                 elif self.IsType(Tile.FOOD_TYPE, newPosition):

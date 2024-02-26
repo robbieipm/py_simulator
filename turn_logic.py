@@ -4,12 +4,14 @@ from food_mng import *
 from terminal_printer import *
 import time
 
+MOVEMENT_PAUSE = 0.3
+
 class TurnLogic:
 
     def __init__(self, grid, foodMng, creatureMng, printer):
         # definitions
         self.CREATURE_INIT_SPAWN = 2
-        self.FOOD_INIT_SPAWN = self.CREATURE_INIT_SPAWN * 2
+        self.FOOD_INIT_SPAWN = self.CREATURE_INIT_SPAWN * 3
         # initializing
         self.grid = grid
         self.creatureMng = creatureMng
@@ -52,9 +54,9 @@ class TurnLogic:
             movementsMade = self.grid.ExecuteMovements(navigationPossibilities)
             consumedFood = self.creatureMng.MoveCreatures(movementsMade)
             self.foodMng.Consume(consumedFood)
-            time.sleep(0.5)
+            time.sleep(MOVEMENT_PAUSE)
             self.printer.RewriteGrid()
+            self.creatureMng.UpdatePaths(self.foodMng.FoodPositions())
             #check with grid which step is taken by every creature and if eaten or not
-            return
             # if wanted step is free -> move, else -> check next wanted step
             # if moved and ate update managers

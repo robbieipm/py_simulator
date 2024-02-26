@@ -5,9 +5,9 @@ from terminal_printer import *
 
 class TurnLogic:
 
-    def __init__(self, grid, creatureMng, foodMng, printer):
+    def __init__(self, grid, foodMng, creatureMng, printer):
         # definitions
-        self.CREATURE_INIT_SPAWN = 1
+        self.CREATURE_INIT_SPAWN = 2
         self.FOOD_INIT_SPAWN = self.CREATURE_INIT_SPAWN * 2
         # initializing
         self.grid = grid
@@ -45,5 +45,13 @@ class TurnLogic:
         # spawn born creatures
 
     def movementStage(self):
-        self.creatureMng.UpdatePaths(self.foodMng.FoodPositions())
-        
+        self.creatureMng.PrepareToMove(self.foodMng.FoodPositions())
+        while self.creatureMng.AreCreaturesStillMoving():
+            navigationPossibilities = self.creatureMng.GetOptionalMovements()
+            movementsMade = self.grid.ExecuteMovements(navigationPossibilities)
+            print(f'options:{navigationPossibilities}\nmade:{movementsMade}')
+            #check with grid which step is taken by every creature and if eaten or not
+            print("wants to move!")
+            return
+            # if wanted step is free -> move, else -> check next wanted step
+            # if moved and ate update managers

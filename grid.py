@@ -92,3 +92,22 @@ class Grid:
         self.grid[creature.xPos][creature.yPos].ChangeType(Tile.CREATURE_TYPE)
         return True
 
+    def ExecuteMovements(self, navigationPossibilities):
+        executedMovements = []
+        for movement in navigationPossibilities:
+            food = 0
+            oldPosition = movement[0]
+            ratedSteps = movement[1]
+            for i in range(len(ratedSteps)):
+                newPosition = [oldPosition[0] + ratedSteps[i][0], oldPosition[1] + ratedSteps[i][1]]
+                if self.IsType(Tile.EMPTY_TYPE, newPosition) or newPosition == oldPosition:
+                    break
+                elif self.IsType(Tile.FOOD_TYPE, newPosition):
+                    food += 1
+                    break
+
+            executedMovements.append([newPosition, food])
+            self.grid[oldPosition[0]][oldPosition[1]].ChangeType(Tile.EMPTY_TYPE)
+            self.grid[newPosition[0]][newPosition[1]].ChangeType(Tile.CREATURE_TYPE)
+        return executedMovements
+

@@ -1,36 +1,31 @@
+from creature_navigator import *
+
 class Creature:
     def __init__(self, position):
-        self.xPos = position[0]
-        self.yPos = position[1]
-        self.home = position
+        self.MAX_STAMINA = 10
+        self.navigator = CreatureNavigator(position, position)
         self.foodCount = 0
-        self.path = [0, 0]
-        self.stamina = 10
+        self.stamina = self.MAX_STAMINA
 
     def Position(self):
-        return [self.xPos, self.yPos]
+        return self.navigator.position
 
     def Move(self, pathMoved):
-        self.xPos = self.xPos + pathMoved[0]
-        self.yPos = self.yPos + pathMoved[1]
+        self.navigator.Move(pathMoved)
 
     def Eat(self, foodAmount):
         self.foodCount += foodAmount
 
     def Reset(self):
         self.foodCount = 0
-        self.path = [0, 0]
+        self.navigator.Reset()
+        self.stamina = self.MAX_STAMINA
 
     def FindClosestInList(self, possibleEnds):
-        closestEnd = self.home
-        self.path = [self.home[0] - self.xPos, self.home[1] - self.yPos]
-        homeLength = abs(self.home[0] - self.xPos) + abs(self.home[1] - self.yPos)
-        minMoves = -1
-        maxMoves = self.stamina - homeLength
+        self.navigator.NavigateToClosestPossible(possibleEnds, self.stamina)
 
-        for possibleEnd in possibleEnds:
-            length = abs(possibleEnd.xPos - self.xPos) + abs(possibleEnd.yPos - self.yPos)
-            if length < minMoves or minMoves < 0 and length < maxMoves:
-                minMoves = length
-                closestEnd = possibleEnd
-                self.path = [possibleEnd.xPos - self.xPos, possibleEnd.yPos - self.yPos]
+    def IsMoving(self):
+        return self.navigator.IsMoving()
+
+    def GetStepsRanking(self):
+        return self.navigator.GetStepsRanking()

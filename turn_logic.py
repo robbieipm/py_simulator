@@ -5,13 +5,13 @@ from terminal_printer import *
 import time
 
 MOVEMENT_PAUSE = 0.3
+FOOD_MULTIPLIER_SPAWN = 3
 
 class TurnLogic:
 
     def __init__(self, grid, foodMng, creatureMng, printer):
         # definitions
-        self.CREATURE_INIT_SPAWN = 2
-        self.FOOD_INIT_SPAWN = self.CREATURE_INIT_SPAWN * 3
+        self.CREATURE_INIT_SPAWN = 8
         # initializing
         self.grid = grid
         self.creatureMng = creatureMng
@@ -23,29 +23,51 @@ class TurnLogic:
 
     def Init(self):
         for _ in range(self.CREATURE_INIT_SPAWN):
+            self.SpawnCreature()
+        for _ in range(self.CREATURE_INIT_SPAWN):
             emptyTile = self.grid.GetEmptyTile()
             if emptyTile.Type() == Tile.INVALID_TYPE:
                 self.printer.PrintError("was unable to spawn creature")
             emptyTile.ChangeType(Tile.CREATURE_TYPE)
             self.creatureMng.Add(emptyTile.Position())
 
-        for _ in range(self.FOOD_INIT_SPAWN):
+        self.printer.RewriteGrid()
+        # TODO: record turn 0
+
+    def SpawnCreature(self, sourceSpawnPositions = []):
+        if len(sourceSpawnPositions) == 0:
+            emptyTile = self.grid.GetEmptyTile()
+            if emptyTile.Type() == Tile.INVALID_TYPE:
+                self.printer.PrintError("was unable to spawn creature")
+            emptyTile.ChangeType(Tile.CREATURE_TYPE)
+            self.creatureMng.Add(emptyTile.Position())
+            return
+        for spawnSourcePos in sourceSpawnPositions:
+            emptyTile = self.grid.GetEmptyTileAround(spawnSourcePos)
+            if emptyTile.Type() == Tile.INVALID_TYPE:
+                continue
+            emptyTile.ChangeType(Tile.CREATURE_TYPE)
+            self.creatureMng.Add(emptyTile.Position())
+
+    def SpawnFood(self, creatureAmount):
+        for _ in range(creatureAmount * FOOD_MULTIPLIER_SPAWN):
             emptyTile = self.grid.GetEmptyTile()
             if emptyTile.Type() == Tile.INVALID_TYPE:
                 self.printer.PrintError("was unable to spawn food")
             emptyTile.ChangeType(Tile.FOOD_TYPE)
             self.foodMng.Add(emptyTile.Position())
 
-        self.printer.RewriteGrid()
-        # TODO: record turn 0
-
     def Start(self, turnNumber):
-        # move creatures to food and back home
+        self.SpawnFood(self.creatureMng.Size())
         self.movementStage()
-        # pause?
-        # remove uneaten food
-        # remove dead creatures
+        self.grid.ResetTiles(self.foodMng.FoodPositions())
+        self.foodMng.Reset()
+        creatureResult = self.creatureMng.EndTurnResult()
+        self.grid.ResetTiles(creatureResult[0])
+        self.SpawnCreature(creatureResult[1])
         # spawn born creatures
+        time.sleep(1)
+        self.printer.RewriteGrid()
 
     def movementStage(self):
         self.creatureMng.PrepareToMove(self.foodMng.FoodPositions())
@@ -57,6 +79,3 @@ class TurnLogic:
             time.sleep(MOVEMENT_PAUSE)
             self.printer.RewriteGrid()
             self.creatureMng.UpdatePaths(self.foodMng.FoodPositions())
-            #check with grid which step is taken by every creature and if eaten or not
-            # if wanted step is free -> move, else -> check next wanted step
-            # if moved and ate update managers

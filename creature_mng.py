@@ -1,5 +1,8 @@
 from creature import *
 
+MIN_FOOD_TO_LIVE = 1
+MIN_FOOD_TO_REPRODUCE = 2
+
 class CreatureMng:
 
     def __init__(self):
@@ -46,3 +49,21 @@ class CreatureMng:
                 self.creatures[creatureIdx].Eat(foodConsumed)
             creatureIdx += 1
         return consumedFoodPositions
+
+    def Size(self):
+        return len(self.creatures)
+
+    def EndTurnResult(self):
+        deadCreatures = []
+        reproducedCreatures = []
+        i = 0
+        for creature in self.creatures.copy():
+            if creature.foodCount < MIN_FOOD_TO_LIVE:
+                deadCreatures.append(creature.Position())
+                self.creatures.pop(i)
+                i -= 1
+            elif creature.foodCount >= MIN_FOOD_TO_REPRODUCE:
+                reproducedCreatures.append(creature.Position())
+            i += 1
+        return [deadCreatures, reproducedCreatures]
+

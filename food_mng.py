@@ -15,10 +15,16 @@ class FoodMng:
         self.food.append(Food(position))
 
     def FoodPositions(self):
-        return self.food
+        foodPositions = []
+        for foodElement in self.food:
+            foodPositions.append(foodElement.Position())
+        return foodPositions
 
     def Consume(self, consumedFoodPositions):
         if len(consumedFoodPositions) == 0:
             return
         for consumedFoodPos in consumedFoodPositions:
             pop_first_element_conditionally(self.food, lambda x: x.Position() == consumedFoodPos)
+
+    def Reset(self):
+        self.food = []

@@ -3,7 +3,7 @@ from creature_navigator import *
 class Creature:
     def __init__(self, position):
         self.MAX_STAMINA = 10
-        self.navigator = CreatureNavigator(position, position)
+        self.navigator = CreatureNavigator(position)
         self.foodCount = 0
         self.stamina = self.MAX_STAMINA
 
@@ -11,11 +11,15 @@ class Creature:
         return self.navigator.position
 
     def Move(self, pathMoved):
+        if pathMoved == STAY_IN_PLACE:
+            return
         self.navigator.Move(pathMoved)
         self.stamina -= 1
 
-    def MoveTo(self, pathMoved):
-        self.navigator.MoveTo(pathMoved)
+    def MoveTo(self, newPosition):
+        if newPosition == self.Position():
+            return
+        self.navigator.MoveTo(newPosition)
         self.stamina -= 1
 
     def Eat(self, foodAmount):

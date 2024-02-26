@@ -10,9 +10,8 @@ def isStepInPathDirection(possibleStep, path):
     return possibleStep[0] * path[0] > 0 or possibleStep[1] * path[1] > 0
 
 class CreatureNavigator:
-    def __init__(self, position, home):
+    def __init__(self, position):
         self.position = position
-        self.home = home
         self.stepRating = []
         self.path = [0, 0]
 
@@ -38,18 +37,17 @@ class CreatureNavigator:
                 self.stepRating.append(possibleStep)
 
     def NavigateToClosestPossible(self, possibleEnds, stamina):
-        closestEnd = self.home
-        self.path = [self.home[0] - self.position[0], self.home[1] - self.position[1]]
-        homeLength = abs(self.home[0] - self.position[0]) + abs(self.home[1] - self.position[1])
-        maxMoves = stamina - homeLength
+        closestEnd = self.position
+        self.path = STAY_IN_PLACE
+        maxMoves = stamina
         minMoves = maxMoves
 
         for possibleEnd in possibleEnds:
-            length = abs(possibleEnd.xPos - self.position[0]) + abs(possibleEnd.yPos - self.position[1])
+            length = abs(possibleEnd[0] - self.position[0]) + abs(possibleEnd[1] - self.position[1])
             if length < minMoves and length < maxMoves:
                 minMoves = length
                 closestEnd = possibleEnd
-                self.path = [possibleEnd.xPos - self.position[0], possibleEnd.yPos - self.position[1]]
+                self.path = [possibleEnd[0] - self.position[0], possibleEnd[1] - self.position[1]]
 
         self.rateSteps()
 

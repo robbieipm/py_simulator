@@ -37,6 +37,27 @@ class Grid:
 
         return Tile(-1, -1, Tile.INVALID_TYPE)
 
+    def GetEmptyTileAround(self, source):
+        possibleTiles = []
+        if source[0] > 0:
+            possibleTiles.append([source[0] - 1, source[1]])
+        if source[0] < self.width - 1:
+            possibleTiles.append([source[0] + 1, source[1]])
+        if source[1] > 0:
+            possibleTiles.append([source[0], source[1] - 1])
+        if source[1] < self.height - 1:
+            possibleTiles.append([source[0], source[1] + 1])
+
+        if len(possibleTiles) == 0:
+            return Tile(-1, -1, Tile.INVALID_TYPE)
+        random.shuffle(possibleTiles)
+        for possibleTilePos in possibleTiles:
+            possibleTile = self.grid[possibleTilePos[0]][possibleTilePos[1]]
+            if possibleTile.Type() == Tile.EMPTY_TYPE:
+                return possibleTile
+
+        return Tile(-1, -1, Tile.INVALID_TYPE)
+
     def Spawn(self, spawnType):
         emptyTile = self.GetEmptyTile()
         if emptyTile.Type() == Tile.INVALID_TYPE:
@@ -53,20 +74,6 @@ class Grid:
 
     def IsType(self, tileType, position):
         return tileType == self.grid[position[0]][position[1]].Type()
-
-    def getStepPosition(self, path):
-        xChange = 0
-        yChange = 0
-        if path[0] > 0:
-            xChange = 1
-        elif path[0] < 0:
-            xChange = -1
-        elif path[1] > 0:
-            yChange = 1
-        else:
-            yChange = -1
-
-        return [xChange, yChange]
 
     def isValidPosition(self, position):
         return position[0] >= 0 and position[0] < self.width and position[1] >= 0 and position[1] < self.height
@@ -92,3 +99,6 @@ class Grid:
             self.grid[newPosition[0]][newPosition[1]].ChangeType(Tile.CREATURE_TYPE)
         return executedMovements
 
+    def ResetTiles(self, tilePositions):
+        for tilePos in tilePositions:
+            self.grid[tilePos[0]][tilePos[1]].ChangeType(Tile.EMPTY_TYPE)

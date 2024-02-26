@@ -2,6 +2,7 @@ from grid import *
 from creature_mng import *
 from food_mng import *
 from terminal_printer import *
+import time
 
 class TurnLogic:
 
@@ -50,9 +51,10 @@ class TurnLogic:
             navigationPossibilities = self.creatureMng.GetOptionalMovements()
             movementsMade = self.grid.ExecuteMovements(navigationPossibilities)
             consumedFood = self.creatureMng.MoveCreatures(movementsMade)
-            print(f'options:{navigationPossibilities}\nmade:{movementsMade}')
+            self.foodMng.Consume(consumedFood)
+            time.sleep(0.5)
+            self.printer.RewriteGrid()
             #check with grid which step is taken by every creature and if eaten or not
-            print("wants to move!")
             return
             # if wanted step is free -> move, else -> check next wanted step
             # if moved and ate update managers

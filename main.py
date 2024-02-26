@@ -1,11 +1,6 @@
 from turn_logic import *
 # import time
 
-# def pop_elements_conditionally(lst, condition):
-#     for i in range(len(lst)):  # Iterate over the list in reverse order
-#         if condition(lst[i]):  # Check if the condition is True for the element
-#             lst.pop(i)  # If True, pop the element from the list
-
 # creatures[0].FindClosestInList(foods)
 # foodCount = creatures[0].foodCount
 # while grid.MoveCreature(creatures[0]) or creatures[0].Position() != creatures[0].home:
@@ -29,7 +24,7 @@ from turn_logic import *
 GRID_HEIGHT = 10
 GRID_WIDTH = 10
 FOOD_SPAWN = 3
-MAX_TURN = 1
+MAX_TURN = 10
 
 # app objects
 creatureMng = CreatureMng()

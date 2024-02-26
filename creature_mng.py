@@ -33,3 +33,16 @@ class CreatureMng:
         for creature in self.creatures:
             optionalMovements.append([creature.Position(), creature.GetStepsRanking()])
         return optionalMovements
+
+    def MoveCreatures(self, movementsInfo):
+        consumedFoodPositions = []
+        creatureIdx = 0
+        for info in movementsInfo:
+            newPosition = info[0]
+            foodConsumed = info[1]
+            self.creatures[creatureIdx].Move(newPosition)
+            if foodConsumed > 0:
+                consumedFoodPositions.append(newPosition)
+                self.creatures[creatureIdx].Eat(foodConsumed)
+            creatureIdx += 1
+        return consumedFoodPositions

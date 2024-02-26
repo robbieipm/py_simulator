@@ -49,6 +49,7 @@ class TurnLogic:
         while self.creatureMng.AreCreaturesStillMoving():
             navigationPossibilities = self.creatureMng.GetOptionalMovements()
             movementsMade = self.grid.ExecuteMovements(navigationPossibilities)
+            consumedFood = self.creatureMng.MoveCreatures(movementsMade)
             print(f'options:{navigationPossibilities}\nmade:{movementsMade}')
             #check with grid which step is taken by every creature and if eaten or not
             print("wants to move!")
